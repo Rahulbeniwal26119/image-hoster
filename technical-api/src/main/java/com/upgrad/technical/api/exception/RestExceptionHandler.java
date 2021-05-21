@@ -12,39 +12,44 @@ import org.springframework.web.context.request.WebRequest;
 public class RestExceptionHandler {
 
 
+    // handling exception iff  authentication failed
     @ExceptionHandler(AuthenticationFailedException.class)
     public ResponseEntity<ErrorResponse> authenticationFailedException(AuthenticationFailedException exc, WebRequest request) {
-//        return new ResponseEntity<ErrorResponse>(
-//                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.UNAUTHORIZED
-//        );
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.UNAUTHORIZED
+        );
     }
 
+    // handling exception iff image uploading failed
     @ExceptionHandler(UploadFailedException.class)
     public ResponseEntity<ErrorResponse> uploadFailedException(UploadFailedException exc, WebRequest request) {
-//        return new ResponseEntity<ErrorResponse>(
-//                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.UNAUTHORIZED
-//        );
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.UNAUTHORIZED
+        );
     }
 
+    // handling exception iff image not found
     @ExceptionHandler(ImageNotFoundException.class)
     public ResponseEntity<ErrorResponse> imagenotfoundException(ImageNotFoundException exc, WebRequest request) {
-//        return new ResponseEntity<ErrorResponse>(
-//                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.NOT_FOUND
-//        );
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.NOT_FOUND
+        );
     }
 
+    // handling exception if user is not signed and a request to fetch image is made
     @ExceptionHandler(UserNotSignedInException.class)
     public ResponseEntity<ErrorResponse> usernotsignedinException(UserNotSignedInException exc, WebRequest request) {
-//        return new ResponseEntity<ErrorResponse>(
-//                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.UNAUTHORIZED
-//        );
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.UNAUTHORIZED
+        );
     }
 
+    // handling exception if unautherised user try to  fetch image
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorResponse> unauthorizedException(UnauthorizedException exc, WebRequest request) {
-//        return new ResponseEntity<ErrorResponse>(
-//                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.FORBIDDEN
-//        );
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.FORBIDDEN
+        );
     }
 
 }

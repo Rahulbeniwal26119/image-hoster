@@ -30,6 +30,7 @@ public class ImageUploadController {
     @Autowired
     private ImageUploadService imageUploadService;
 
+    // uploading image endpoint
     @RequestMapping(method = RequestMethod.POST, path = "/imageupload", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<ImageUploadResponse> imageupload(final ImageUploadRequest imageUploadRequest, @RequestHeader("authorization") final String authorization) throws UploadFailedException, UnsupportedEncodingException {
         final ImageEntity imageEntity = new ImageEntity();
@@ -44,5 +45,6 @@ public class ImageUploadController {
 
         final ImageEntity createdimageEntity = imageUploadService.upload(imageEntity, authorization);
         ImageUploadResponse imageUploadResponse = new ImageUploadResponse().id(createdimageEntity.getUuid()).status("IMAGE SUCCESSFULLY REGISTERED");
+        return new ResponseEntity<ImageUploadResponse>(imageUploadResponse, HttpStatus.CREATED); // Status code 201 means entry created in db
     }
 }
