@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+@RestController
 @RequestMapping("/")
 public class SignupController {
 
