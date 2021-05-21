@@ -27,14 +27,46 @@ public class AdminService {
 
         UserAuthTokenEntity userAuthTokenEntity = imageDao.getUserAuthToken(authorization);
 
+        if(userAuthTokenEntity == null)
+            throw new UserNotSignedInException("USR-001", "For image detail, You need to be signed in.");
+
         String role = userAuthTokenEntity.getUser().getRole();
+
+        if(!role.equals("admin"))
+            throw new UnauthorizedException("ATH-001", "UNAUTHORIZED Access, User is not an admin.");
+
+        ImageEntity image = imageDao.getImage(imageUuid);
+
+        if(image == null)
+            throw new ImageNotFoundException("IMG-001", "No image found with this Uuid");
+
+        return image;
+
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ImageEntity updateImage(final ImageEntity imageEntity, final String authorization) throws ImageNotFoundException, UnauthorizedException, UserNotSignedInException {
         UserAuthTokenEntity userAuthTokenEntity = imageDao.getUserAuthToken(authorization);
 
+        if(userAuthTokenEntity == null)
+            throw new UserNotSignedInException("USR-001", "Be a signed user to get the details of image");
+
         String role = userAuthTokenEntity.getUser().getRole();
 
+        if(!role.equals("admin"))
+            throw new UnauthorizedException("ATH-001", "UNAUTHERISED Acess, User is not admin.");
+
+        ImageEntity updationImage = imageDao.getImageById(imageEntity.getId());
+
+        if(updationImage == null)
+            throw new ImageNotFoundException("IMG-001", "Image with id not found");
+
+        updationImage.setImage(imageEntity.getImage());
+        updationImage.setStatus(imageEntity.getStatus());
+        updationImage.setDescription(imageEntity.getDescription());
+        updationImage.setName(imageEntity.getName());
+
+        imageDao.updateImage(updationImage);
+        return updationImage;
     }
 }

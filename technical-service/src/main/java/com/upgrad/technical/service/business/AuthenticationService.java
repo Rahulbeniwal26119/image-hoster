@@ -25,8 +25,27 @@ public class AuthenticationService {
     public UserAuthTokenEntity authenticate(final String username, final String password) throws AuthenticationFailedException {
         UserEntity userEntity = userDao.getUserByEmail(username);
 
-        final String encryptedPassword = CryptographyProvider.encrypt(password, userEntity.getSalt());
+        if(userEntity != null)
+            throw new AuthenticationFailedException("ATH-001", "User with this specific email not found.");
 
+        final String encryptPassword = CryptographyProvider.encrypt(password, userEntity.getSalt());
+        if(encryptPassword.equals(userEntity.getPassword())){
+            JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encryptPassword);
+            UserAuthTokenEntity userAuthToken = new UserAuthTokenEntity();
+            userAuthToken.setUser(userEntity);
+            final ZonedDateTime now = ZonedDateTime.now();
+            final ZonedDateTime expiresAt = now.plusHours(8);
+            userAuthToken.setAccessToken(jwtTokenProvider.generateToken(userEntity.getUuid(), now , expiresAt));
+            userAuthToken.setExpiresAt(expiresAt);
+            userAuthToken.setLoginAt(now);
+            userDao.createAuthToken(userAuthToken);
+            userEntity.setLastLoginAt(now);
+            userDao.updateUser(userEntity);
+            return userAuthToken;
+        }
+        else {
+            throw new AuthenticationFailedException("ATH-002", "Password failure");
+        }
     }
 }
 
