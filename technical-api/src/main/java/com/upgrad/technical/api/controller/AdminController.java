@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
+// End Point Implementation for admin
 public class AdminController {
 
 
@@ -51,7 +52,9 @@ public class AdminController {
 
         ImageEntity updatedimageEntity = adminService.updateImage(imageEntity, authorization);
         UpdateImageResponse updateImageResponse = new UpdateImageResponse().id((int) updatedimageEntity.getId()).status(updatedimageEntity.getStatus());
+        // return the image and status
         return new ResponseEntity<UpdateImageResponse> (updateImageResponse, HttpStatus.OK);
+
 
 
 

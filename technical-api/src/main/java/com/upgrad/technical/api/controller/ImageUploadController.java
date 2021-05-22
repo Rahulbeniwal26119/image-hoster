@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+// Upload Image EndPoint Implementation
 @RestController
 @RequestMapping("/")
 public class ImageUploadController {
@@ -42,7 +43,7 @@ public class ImageUploadController {
         imageEntity.setCreated_at(ZonedDateTime.now());
         imageEntity.setStatus("REGISTERED");
 
-
+        // Calling Business Logic For Uploading Image
         final ImageEntity createdimageEntity = imageUploadService.upload(imageEntity, authorization);
         ImageUploadResponse imageUploadResponse = new ImageUploadResponse().id(createdimageEntity.getUuid()).status("IMAGE SUCCESSFULLY REGISTERED");
         return new ResponseEntity<ImageUploadResponse>(imageUploadResponse, HttpStatus.CREATED); // Status code 201 means entry created in db

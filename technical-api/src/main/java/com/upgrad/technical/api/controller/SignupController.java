@@ -22,6 +22,7 @@ public class SignupController {
     @Autowired
     private SignupBusinessService signupBusinessService;
 
+    // Mapping End For signup
     @RequestMapping(method = RequestMethod.POST, path = "/usersignup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupUserResponse> userSignup(final SignupUserRequest signupUserRequest) {
 
@@ -37,6 +38,7 @@ public class SignupController {
         userEntity.setRole("nonadmin");
 
         final UserEntity createdUserEntity = signupBusinessService.signup(userEntity);
+        //Calling Business logic For Signup
         SignupUserResponse userResponse = new SignupUserResponse().id(createdUserEntity.getUuid()).status("USER SUCCESSFULLY REGISTERED");
         return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED); // new user created with status code 201
     }
