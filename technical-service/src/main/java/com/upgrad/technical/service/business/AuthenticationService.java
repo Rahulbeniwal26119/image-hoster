@@ -26,7 +26,7 @@ public class AuthenticationService {
         UserEntity userEntity = userDao.getUserByEmail(username);
 
         if(userEntity == null)
-            throw new AuthenticationFailedException("ATH-001", "User with this specific email not found.");
+            throw new AuthenticationFailedException("ATH-001", "User with email not found.");
 
         final String encryptPassword = CryptographyProvider.encrypt(password, userEntity.getSalt());
         if(encryptPassword.equals(userEntity.getPassword())){

@@ -28,17 +28,17 @@ public class AdminService {
         UserAuthTokenEntity userAuthTokenEntity = imageDao.getUserAuthToken(authorization);
 
         if(userAuthTokenEntity == null)
-            throw new UserNotSignedInException("USR-001", "For image detail, You need to be signed in.");
+            throw new UserNotSignedInException("USR-001", "You are not Signed in, sign in first to get the details of the image.");
 
         String role = userAuthTokenEntity.getUser().getRole();
 
         if(!role.equals("admin"))
-            throw new UnauthorizedException("ATH-001", "UNAUTHORIZED Access, User is not an admin.");
+            throw new UnauthorizedException("ATH-001", "UNAUTHORIZED Access, Entered user is not an admin.");
 
         ImageEntity image = imageDao.getImage(imageUuid);
 
         if(image == null)
-            throw new ImageNotFoundException("IMG-001", "No image found with this Uuid");
+            throw new ImageNotFoundException("IMG-001", "Image with Uuid not found");
 
         return image;
 
@@ -49,24 +49,24 @@ public class AdminService {
         UserAuthTokenEntity userAuthTokenEntity = imageDao.getUserAuthToken(authorization);
 
         if(userAuthTokenEntity == null)
-            throw new UserNotSignedInException("USR-001", "Be a signed user to get the details of image");
+            throw new UserNotSignedInException("USR-001", "You are not Signed in, sign in first to get the details of the image");
 
         String role = userAuthTokenEntity.getUser().getRole();
 
         if(!role.equals("admin"))
-            throw new UnauthorizedException("ATH-001", "UNAUTHERISED Acess, User is not admin.");
+            throw new UnauthorizedException("ATH-001", "UNAUTHORIZED Access, Entered user is not an admin.");
 
         ImageEntity updationImage = imageDao.getImageById(imageEntity.getId());
 
         if(updationImage == null)
-            throw new ImageNotFoundException("IMG-001", "Image with id not found");
+            throw new ImageNotFoundException("IMG-001", "Image with Id not found");
 
         updationImage.setImage(imageEntity.getImage());
         updationImage.setStatus(imageEntity.getStatus());
         updationImage.setDescription(imageEntity.getDescription());
         updationImage.setName(imageEntity.getName());
 
-        imageDao.updateImage(updationImage);
+        imageDao.updateImage(updationImage); // Update the Image in Database
         return updationImage;
     }
 }

@@ -26,7 +26,7 @@ public class ImageUploadService {
         UserAuthTokenEntity userAuthTokenEntity = imageDao.getUserAuthToken(authorizationToken);
 
         if(userAuthTokenEntity == null)
-            throw new UploadFailedException("UP-001", "User is not Signed in, sign in to upload an image");
+            throw new UploadFailedException("UP-001", "User is not Signed in, sign in to upload an image.");
 
         imageEntity.setUser_id(userAuthTokenEntity.getUser());
         imageDao.createImage(imageEntity);
