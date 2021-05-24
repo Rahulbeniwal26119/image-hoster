@@ -29,18 +29,24 @@ public class AuthenticationService {
             throw new AuthenticationFailedException("ATH-001", "User with email not found.");
 
         final String encryptPassword = CryptographyProvider.encrypt(password, userEntity.getSalt());
+
         if(encryptPassword.equals(userEntity.getPassword())){
-            JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encryptPassword);
+
+            JwtTokenProvider jwtTokenGenerator = new JwtTokenProvider(encryptPassword);
             UserAuthTokenEntity userAuthToken = new UserAuthTokenEntity();
             userAuthToken.setUser(userEntity);
-            final ZonedDateTime now = ZonedDateTime.now();
-            final ZonedDateTime expiresAt = now.plusHours(8);
-            userAuthToken.setAccessToken(jwtTokenProvider.generateToken(userEntity.getUuid(), now , expiresAt));
-            userAuthToken.setExpiresAt(expiresAt);
-            userAuthToken.setLoginAt(now);
+
+            final ZonedDateTime currentTime = ZonedDateTime.now();
+            final ZonedDateTime validTill = currentTime.plusHours(18);
+
+            userAuthToken.setAccessToken(jwtTokenGenerator.generateToken(userEntity.getUuid(), currentTime , validTill));
+            userAuthToken.setExpiresAt(validTill);
+            userAuthToken.setLoginAt(currentTime);
+
             userDao.createAuthToken(userAuthToken);
-            userEntity.setLastLoginAt(now);
+            userEntity.setLastLoginAt(currentTime);
             userDao.updateUser(userEntity);
+
             return userAuthToken;
         }
         else {

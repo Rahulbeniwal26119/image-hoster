@@ -22,7 +22,7 @@ public class AdminService {
 
     @Autowired
     private ImageDao imageDao;
-
+    // Get image from database
     public ImageEntity getImage(final String imageUuid, final String authorization) throws ImageNotFoundException, UnauthorizedException, UserNotSignedInException {
 
         UserAuthTokenEntity userAuthTokenEntity = imageDao.getUserAuthToken(authorization);
